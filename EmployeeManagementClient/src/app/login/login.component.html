@@ -1,0 +1,33 @@
+<div class="container">
+    <div style="font-weight: 500;text-align: center;font-size: 30px;">Welcome to Employee Management Service</div>
+    <div style="font-weight: 500;text-align: center;font-size: 18px;color: red;">{{errorMsg}}</div>    
+    <form #loginForm="ngForm" (ngSubmit)="checkLogin();" novalidate>
+    <table class="table table-hover">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Employee name:</label>
+           
+                    <input type="text" #ename="ngModel" [class.is-invalid]="ename.invalid && ename.touched" class="form-control" name="ename" [(ngModel)]="employeeModel.ename" required> 
+                    <small class="text-danger" [class.d-none]="ename.valid || ename.untouched">Please enter employeename</small>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                    Password :
+            
+                    <input type="password" #password="ngModel" [class.is-invalid]="password.invalid && password.touched" class="form-control" name="password" [(ngModel)]="employeeModel.password" required>
+                    <small class="text-danger" [class.d-none]="password.valid || password.untouched">Please enter password</small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                    <button [disabled]="!loginForm.form.valid" class="btn btn-success">
+                            Login
+                        </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>

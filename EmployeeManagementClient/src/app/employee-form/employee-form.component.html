@@ -1,0 +1,140 @@
+<div class="container-fluid">
+    <h1>Employee Registration Form </h1>
+    <div style="text-align: center;color: red;" *ngIf="errorMsg">{{errorMsg}}</div>
+    <form #employeeForm="ngForm" (ngSubmit)="onSubmit();" novalidate>
+        <!-- <div class="form-group">
+            <label>Employee Id</label>
+            <input type="text" class="form-control">
+        </div> -->
+        {{employeeForm.form.valid}}
+        {{employeeForm.value | json}}
+        {{employeeModel | json}}
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>department</label>
+                            <!-- <input type="text" value="{{department.departmentName}}" class="form-control"> -->
+                            <select #department="ngModel"
+                            [class.is-invalid]="department.invalid && department.touched"
+                            class="form-control" name="department" 
+                            (click)="filterByDeptId($event.target.value);" 
+                            [(ngModel)]="employeeModel.department.departmentId" required>
+                                <option *ngFor="let dept of deptList" value="{{dept.departmentId}}">{{dept.departmentName}}</option>
+                                <option value="0">Add New Department</option>
+                            </select>
+                            <small class="text-danger" [class.d-none]="department.valid || department.untouched">Please select department</small>
+                        </div>                            
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label>Manager</label>
+                            <select #manager="ngModel" 
+                            [class.is-invalid]="manager.invalid && manager.touched && !addAsAManager"
+                            class="form-control" 
+                            name="manager"
+                            [(ngModel)]="employeeModel.manager" required [disabled]="addAsAManager">
+                                <ng-container *ngFor="let emp of employees">
+                                    <option *ngIf="emp.job == 'Manager' " value="{{emp.employeeId}}">{{emp.ename}}</option>
+                                </ng-container>
+                            </select>
+                            <small class="text-danger" [class.d-none]="manager.valid || manager.untouched || addAsAManager">Manager is required</small>
+                            Add As A Manager : <input type="checkbox" name="addAsAManager" [(ngModel)]="addAsAManager" 
+                                                (change)="addAsAManagerF($event);">
+                        </div>                                
+                    </td>
+                </tr>
+                <tr *ngIf="enableDepartmentFields">
+                    <td>
+                        <div class="form-group">
+                            <label>Dept Name</label>
+                            <!-- <input type="text" value="{{department.departmentName}}" class="form-control"> -->
+                            <input type="text" #departmentName="ngModel"
+                            [class.is-invalid]="departmentName.invalid && departmentName.touched"
+                            class="form-control" name="departmentName" 
+                            [(ngModel)]="employeeModel.department.departmentName" required
+                            value="">
+                           
+                            <small class="text-danger" [class.d-none]="departmentName.valid || departmentName.untouched">Please select department name</small>
+                        </div>    
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label>Dept Location</label>
+                            <!-- <input type="text" value="{{department.departmentName}}" class="form-control"> -->
+                            <input type="text" #location="ngModel"
+                            [class.is-invalid]="location.invalid && location.touched"
+                            class="form-control" name="location"  
+                            [(ngModel)]="employeeModel.department.location" required
+                            value="">
+                            
+                            <small class="text-danger" [class.d-none]="location.valid || location.untouched">Please select location</small>
+                        </div>            
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Employee Name</label>
+                            <input
+                                name="ename"
+                                type="text"
+                                class="form-control validate"
+                                id="ename"
+                                [class.is-invalid]="ename.invalid && ename.touched"
+                                #ename="ngModel"
+                                [(ngModel)]="employeeModel.ename"
+                                value=""
+                                required/>
+                            <small class="text-danger" [class.d-none]="ename.valid || ename.untouched">Name is required</small>
+                        </div>
+                    </td>
+                    
+                    <td>
+                        <div class="form-group">
+                            <label>Job Type</label>
+                            <input type="text" #job="ngModel" 
+                            [class.is-invalid]="job.invalid && job.touched" 
+                            class="form-control" name="job" 
+                            [(ngModel)]="employeeModel.job" required>
+                            <small class="text-danger" [class.d-none]="job.valid || job.untouched">Job is required</small>                            
+                        </div>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label>Hiredate</label>
+                            <input type="date" #hiredate="ngModel" 
+                            [class.is-invalid]="hiredate.invalid && hiredate.touched" 
+                            class="form-control" name="hiredate"
+                            [(ngModel)]="employeeModel.hiredate" required>
+                            <small class="text-danger" [class.d-none]="hiredate.valid || hiredate.untouched">Hiredate is required</small>                            
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label>Salary</label>
+                            <input type="text" #salary="ngModel" 
+                            pattern="^\d{5}" [class.is-invalid]="salary.invalid && salary.touched" 
+                            class="form-control" name="salary" [(ngModel)]="employeeModel.salary" required>
+                            <div *ngIf="salary.errors && (salary.invalid || salary.touched)">
+                            <small class="text-danger" *ngIf="salary.errors.required">Salary is required</small>
+                            <small class="text-danger" *ngIf="salary.errors.pattern">Salary must be morethan 4 digits...</small>
+                            </div>
+                        </div>                                
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button [disabled]="!employeeForm.form.valid" class="btn btn-primary">Registration</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>            
+        
+
+    
+    </form>
+</div>
